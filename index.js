@@ -7,7 +7,7 @@ var GH_TOKEN = process.env.GITHUB_TOKEN;
 
 if (GH_TOKEN === undefined) {
     console.error(
-        "Please store a GitHub token with the 'public_repo' permission in a `GITHUB_TOKEN` environment variable.\n\nhttps://github.com/settings/tokens"
+        "\nPlease store a GitHub token with the 'public_repo' permission in a `GITHUB_TOKEN` environment variable.\n\nYou can do so here: https://github.com/settings/tokens"
     );
     process.exit(1);
 }
@@ -20,6 +20,13 @@ github.authenticate({
 
 fs
     .readFileAsync("elm-package.json")
+    .catch(function() {
+        console.error(
+            "It seems like you don't have an `elm-package.json` in this folder, or won't let me read it for some reason.\n\nPlease run this from inside an Elm project :)"
+        );
+
+        process.exit(1);
+    })
     .then(function(data) {
         var packageData = JSON.parse(data);
         return Object.keys(packageData.dependencies || {}).map(function(
@@ -28,6 +35,13 @@ fs
             var parts = dependency.split("/");
             return { owner: parts[0], repo: parts[1] };
         });
+    })
+    .catch(function() {
+        console.error(
+            "Are you sure that your `elm-package.json` is a valid JSON file?"
+        );
+
+        process.exit(1);
     })
     .then(function(dependencies) {
         console.log(
@@ -39,7 +53,9 @@ fs
         return Promise.all(
             dependencies.map(function(dependency) {
                 console.log(
-                    "🌟 Thanks to " +
+                    "🌟  " +
+                        chalk.blue("Thanks") +
+                        " to " +
                         chalk.blue.bold(dependency.owner) +
                         " for " +
                         chalk.blue.bold(
@@ -51,13 +67,13 @@ fs
             })
         );
     })
+    .catch(function() {
+        console.error(
+            "\nAww, I failed to connect to github. Are you sure you have a network connection and a valid token with `public_repo`?"
+        );
+
+        process.exit(1);
+    })
     .then(function() {
         console.log("\nAll done, thanks for being grateful! 💖\n");
-    })
-    .catch(function(e) {
-        console.error(
-            "Ohnoes! Something went wrong. Here's a weird stack trace:\n\n",
-            e
-        );
-        process.exit(1);
     });

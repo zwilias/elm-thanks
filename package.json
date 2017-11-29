@@ -10,6 +10,9 @@
     "type": "git",
     "url": "git+https://github.com/zwilias/elm-thanks.git"
   },
+  "bin": {
+      "elm-thanks": "bin/elm-thanks"
+  },
   "keywords": [
     "elm",
     "thanks"
