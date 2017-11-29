@@ -1,0 +1,28 @@
+{
+  "name": "elm-thanks",
+  "version": "1.0.0",
+  "description": "Say thanks for developing and maintaining your dependencies",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/zwilias/elm-thanks.git"
+  },
+  "keywords": [
+    "elm",
+    "thanks"
+  ],
+  "author": "Ilias Van Peer",
+  "license": "BSD-3-Clause",
+  "bugs": {
+    "url": "https://github.com/zwilias/elm-thanks/issues"
+  },
+  "homepage": "https://github.com/zwilias/elm-thanks#readme",
+  "dependencies": {
+    "bluebird": "^3.5.1",
+    "chalk": "^2.3.0",
+    "github": "^12.1.0"
+  }
+}
