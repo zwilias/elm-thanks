@@ -5,11 +5,17 @@ var Promise = require("bluebird"),
 
 var GH_TOKEN = process.env.GITHUB_TOKEN;
 
-if (GH_TOKEN === undefined) {
-    console.error(
-        "\nPlease store a GitHub token with the 'public_repo' permission in a `GITHUB_TOKEN` environment variable.\n\nYou can configure a token here: https://github.com/settings/tokens\n"
-    );
+function failWithMessage(message) {
+  return function() {
+    console.error(message);
     process.exit(1);
+  }
+}
+
+if (GH_TOKEN === undefined) {
+    failWithMessage(
+        "\nPlease store a GitHub token with the 'public_repo' permission in a `GITHUB_TOKEN` environment variable.\n\nYou can configure a token here: https://github.com/settings/tokens\n"
+    )();
 }
 
 var github = new GitHubApi();
@@ -20,13 +26,9 @@ github.authenticate({
 
 fs
     .readFileAsync("elm-package.json")
-    .catch(function() {
-        console.error(
-            "It seems like you don't have an `elm-package.json` in this folder, or won't let me read it for some reason.\n\nPlease run this in an Elm project :)\n"
-        );
-
-        process.exit(1);
-    })
+    .catch(failWithMessage(
+         "It seems like you don't have an `elm-package.json` in this folder, or won't let me read it for some reason.\n\nPlease run this in an Elm project :)\n"
+    ))
     .then(function(data) {
         var packageData = JSON.parse(data);
         return Object.keys(packageData.dependencies || {}).map(function(
@@ -36,13 +38,9 @@ fs
             return { owner: parts[0], repo: parts[1] };
         });
     })
-    .catch(function() {
-        console.error(
-            "Are you sure that your `elm-package.json` is a valid JSON file?\n"
-        );
-
-        process.exit(1);
-    })
+    .catch(failWithMessage(
+        "Are you sure that your `elm-package.json` is a valid JSON file?\n"
+    ))
     .then(function(dependencies) {
         console.log(
             "Saying thanks to everyone who helped create and maintain your Elm project's dependencies...\n"
@@ -67,13 +65,9 @@ fs
             })
         );
     })
-    .catch(function() {
-        console.error(
-            "\nAww, I failed to connect to github. Are you sure you have a network connection and a valid token with `public_repo` permissions?\n"
-        );
-
-        process.exit(1);
-    })
+    .catch(failWithMessage(
+        "\nAww, I failWithMessageed to connect to github. Are you sure you have a network connection and a valid token with `public_repo` permissions?\n"
+    ))
     .then(function() {
         console.log("\nAll done, thanks for being grateful! 💖\n");
     });
