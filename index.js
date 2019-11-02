@@ -24,19 +24,31 @@ github.authenticate({
     token: GH_TOKEN
 });
 
-fs
-    .readFileAsync("elm-package.json")
-    .catch(failWithMessage(
-         "It seems like you don't have an `elm-package.json` in this folder, or won't let me read it for some reason.\n\nPlease run this in an Elm project :)\n"
-    ))
-    .then(function(data) {
-        var packageData = JSON.parse(data);
-        return Object.keys(packageData.dependencies || {}).map(function(
-            dependency
-        ) {
+function extractDependencies(dependencies) {
+    return Object
+        .keys(dependencies)
+        .flatMap(function(dependency) {
+            // in elm 0.19+ dependencies are nested
+            if (dependency === 'direct' || dependency === 'indirect') {
+                return extractDependencies(dependencies[dependency]);
+            }
             var parts = dependency.split("/");
             return { owner: parts[0], repo: parts[1] };
         });
+}
+
+fs
+    .readFileAsync("elm-package.json")
+    .catch(function() {
+        return fs.readFileAsync("elm.json");
+    })
+    .catch(failWithMessage(
+        "It seems like you don't have an `elm-package.json` or `elm.json` in this folder, or won't let me read it for some reason.\n\nPlease run this in an Elm project :)\n"
+    ))
+    .then(function(data) {
+        var packageData = JSON.parse(data);
+        var dependencies = packageData.dependencies || {};
+        return extractDependencies(dependencies);
     })
     .catch(failWithMessage(
         "Are you sure that your `elm-package.json` is a valid JSON file?\n"
