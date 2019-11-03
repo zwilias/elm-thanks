@@ -19,13 +19,11 @@ $ npm i -g elm-thanks
 
 ## Run it
 
-From any folder containing an `elm-package.json` run
+From any folder containing either an `elm-package.json` or an `elm.json` file, run:
 
 ```sh
 $ elm-thanks
 ```
-
-(or even `elm thanks`)
 
 ## Caveat
 
@@ -34,4 +32,4 @@ In the interest of getting this hacked together quickly; the code is poor.
 ---
 
 Made with ❤️ and licensed under BSD3
-© 2017 - Ilias Van Peer
+© 2017-2019 Ilias Van Peer
