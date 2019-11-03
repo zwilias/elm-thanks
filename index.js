@@ -1,5 +1,5 @@
 var Promise = require("bluebird"),
-    GitHubApi = require("github"),
+    GitHubApi = require("@octokit/rest"),
     fs = Promise.promisifyAll(require("fs")),
     chalk = require("chalk");
 

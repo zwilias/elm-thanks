@@ -11,7 +11,7 @@
     "url": "git+https://github.com/zwilias/elm-thanks.git"
   },
   "bin": {
-      "elm-thanks": "bin/elm-thanks"
+    "elm-thanks": "bin/elm-thanks"
   },
   "keywords": [
     "elm",
@@ -24,8 +24,8 @@
   },
   "homepage": "https://github.com/zwilias/elm-thanks#readme",
   "dependencies": {
-    "bluebird": "^3.5.1",
-    "chalk": "^2.3.0",
-    "github": "^12.1.0"
+    "@octokit/rest": "^16.34.1",
+    "bluebird": "^3.7.1",
+    "chalk": "^2.4.2"
   }
 }
